@@ -1,0 +1,12 @@
+.actbar {
+  max-width: 30px;
+  background-color: lightblue;
+  margin: 4px;
+  width:30px;
+  cursor: pointer;
+  display: block;
+}
+
+.actbar:hover {
+  background-color: #6e7de6;
+}

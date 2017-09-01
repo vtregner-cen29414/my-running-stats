@@ -1,20 +1,41 @@
-<!--The whole content below can be removed with the new code.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNTAgMjUwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNTAgMjUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojREQwMDMxO30NCgkuc3Qxe2ZpbGw6I0MzMDAyRjt9DQoJLnN0MntmaWxsOiNGRkZGRkY7fQ0KPC9zdHlsZT4NCjxnPg0KCTxwb2x5Z29uIGNsYXNzPSJzdDAiIHBvaW50cz0iMTI1LDMwIDEyNSwzMCAxMjUsMzAgMzEuOSw2My4yIDQ2LjEsMTg2LjMgMTI1LDIzMCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAJIi8+DQoJPHBvbHlnb24gY2xhc3M9InN0MSIgcG9pbnRzPSIxMjUsMzAgMTI1LDUyLjIgMTI1LDUyLjEgMTI1LDE1My40IDEyNSwxNTMuNCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAxMjUsMzAgCSIvPg0KCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMjUsNTIuMUw2Ni44LDE4Mi42aDBoMjEuN2gwbDExLjctMjkuMmg0OS40bDExLjcsMjkuMmgwaDIxLjdoMEwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMQ0KCQlMMTI1LDUyLjF6IE0xNDIsMTM1LjRIMTA4bDE3LTQwLjlMMTQyLDEzNS40eiIvPg0KPC9nPg0KPC9zdmc+DQo=" />
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" href="https://angular.io/docs/ts/latest/tutorial/">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="http://angularjs.blogspot.ca/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="container">
+  <app-header></app-header>
 
+  <app-summary></app-summary>
+
+  <!--<div *ngFor="let month of activities">-->
+    <table class="table" *ngIf="activities[selectedMonthIndex].currentMonth != null; else loading" >
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>Moving time</th>
+        <th>Pace <small>m/km</small></th>
+        <th>Distance</th>
+      </tr>
+      </thead>
+      <tfoot>
+      <tr>
+        <th>{{ activities[selectedMonthIndex].activityTypes[currentActivity].num }} {{ activityDesc[currentActivity] }} in {{ activities[selectedMonthIndex].currentMonth | date:'MMMM' }}</th>
+        <th></th>
+        <th>Total {{ (activities[selectedMonthIndex].activityTypes[currentActivity].totalDistance )/1000 | number:'.1-2' }} km</th>
+      </tr>
+      </tfoot>
+      <tbody>
+      <tr *ngFor="let act of activities[selectedMonthIndex].activityTypes[currentActivity].activities">
+        <td><p>{{ act.start_date | date:'d.M.y h:m:s'}}</p></td>
+        <td><p>{{ convertSeconds(act.moving_time) }}</p></td>
+        <td><p>{{ computePace(act.moving_time, act.distance) }}</p></td>
+        <td><p>{{ act.distance/1000 | number:'.1-2' }} km</p></td>
+      </tr>
+      </tbody>
+    </table>
+    <hr>
+
+    <ng-template #loading>
+      <p>Loading...</p>
+    </ng-template>
+
+  <!--</div>-->
+
+
+</div>
