@@ -1,0 +1,27 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th>Date</th>
+    <th>Moving time</th>
+    <th>Avg Speed <small>km/h</small></th>
+    <th>Elevation <small>m</small></th>
+    <th>Distance</th>
+  </tr>
+  </thead>
+  <tfoot>
+  <tr>
+    <th>{{ activitySummary.num }} runs in {{ month | date:'MMMM' }}</th>
+    <th></th>
+    <th>Total {{ (activitySummary.totalDistance )/1000 | number:'.1-2' }} km</th>
+  </tr>
+  </tfoot>
+  <tbody>
+  <tr *ngFor="let act of activitySummary.activities">
+    <td><p>{{ act.start_date | date:'d.M.y'}}</p></td>
+    <td><p>{{ convertSeconds(act.moving_time) }}</p></td>
+    <td><p>{{ computeSpped(act.moving_time, act.distance) | number:'.1-2' }}</p></td>
+    <td><p>{{ act.total_elevation_gain }}</p></td>
+    <td><p>{{ act.distance/1000 | number:'.1-2' }} km</p></td>
+  </tr>
+  </tbody>
+</table>

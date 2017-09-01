@@ -3,39 +3,16 @@
 
   <app-summary></app-summary>
 
-  <!--<div *ngFor="let month of activities">-->
-    <table class="table" *ngIf="activities[selectedMonthIndex].currentMonth != null; else loading" >
-      <thead>
-      <tr>
-        <th>Date</th>
-        <th>Moving time</th>
-        <th>Pace <small>m/km</small></th>
-        <th>Distance</th>
-      </tr>
-      </thead>
-      <tfoot>
-      <tr>
-        <th>{{ activities[selectedMonthIndex].activityTypes[currentActivity].num }} {{ activityDesc[currentActivity] }} in {{ activities[selectedMonthIndex].currentMonth | date:'MMMM' }}</th>
-        <th></th>
-        <th>Total {{ (activities[selectedMonthIndex].activityTypes[currentActivity].totalDistance )/1000 | number:'.1-2' }} km</th>
-      </tr>
-      </tfoot>
-      <tbody>
-      <tr *ngFor="let act of activities[selectedMonthIndex].activityTypes[currentActivity].activities">
-        <td><p>{{ act.start_date | date:'d.M.y h:m:s'}}</p></td>
-        <td><p>{{ convertSeconds(act.moving_time) }}</p></td>
-        <td><p>{{ computePace(act.moving_time, act.distance) }}</p></td>
-        <td><p>{{ act.distance/1000 | number:'.1-2' }} km</p></td>
-      </tr>
-      </tbody>
-    </table>
-    <hr>
+  <div style="padding-top: 30px"></div>
 
-    <ng-template #loading>
-      <p>Loading...</p>
-    </ng-template>
+  <app-activities
+    *ngIf="activities[selectedMonthIndex].currentMonth != null; else loading"
+    [currentActivityType]="currentActivityType"
+    [activities]="activities[selectedMonthIndex]">
+  </app-activities>
 
-  <!--</div>-->
-
+  <ng-template #loading>
+    Loading...
+  </ng-template>
 
 </div>

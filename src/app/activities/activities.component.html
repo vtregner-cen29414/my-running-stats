@@ -1,0 +1,18 @@
+<h2>{{ activities.currentMonth | date:'MMMM yyyy' }}</h2>
+
+<app-run *ngIf="currentActivityType === 0"
+  [month]="activities.currentMonth"
+  [activitySummary]="activities.activityTypes[currentActivityType]" >
+</app-run>
+
+<app-ride *ngIf="currentActivityType === 1"
+  [month]="activities.currentMonth"
+  [activitySummary]="activities.activityTypes[currentActivityType]" >
+</app-ride>
+
+<app-hike *ngIf="currentActivityType === 2"
+          [month]="activities.currentMonth"
+          [activitySummary]="activities.activityTypes[currentActivityType]" >
+</app-hike>
+
+

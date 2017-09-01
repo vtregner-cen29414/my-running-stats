@@ -9,20 +9,22 @@ import {MonthActivities} from '../model/monthactivities';
 })
 export class SummaryComponent implements OnInit {
 
-  currentActivity = 0;
+  currentActivityType = 0;
   activities: MonthActivities[];
-  maxDistances: number[] = [0, 0];
-  minDates: Date[] = [new Date(), new Date()];
+  maxDistances: number[] = [0, 0, 0];
+  minDates: Date[] = [new Date(), new Date(), new Date()];
+  selectedMonth = 0;
 
   constructor(private stravaService: StravaService) { }
 
   ngOnInit() {
     this.stravaService.activityTypeObserver.subscribe((type: number) => {
-      this.currentActivity = type;
+      this.currentActivityType = type;
     });
 
 
     this.activities = this.stravaService.activities.slice().reverse();
+    this.selectedMonth = this.activities.length - 1;
 
     this.stravaService.activityLoadedSubject.subscribe((data: MonthActivities) => {
       for (let i = 0; i < this.maxDistances.length; i++ ) {
@@ -37,7 +39,7 @@ export class SummaryComponent implements OnInit {
   }
 
   computeHeight(month: MonthActivities): string {
-    return Math.ceil(month.activityTypes[this.currentActivity].totalDistance / this.maxDistances[this.currentActivity] * 300) + 'px';
+    return Math.ceil(month.activityTypes[this.currentActivityType].totalDistance / this.maxDistances[this.currentActivityType] * 300) + 'px';
   }
 
   roundDistance(distance: number): number {
@@ -45,12 +47,13 @@ export class SummaryComponent implements OnInit {
   }
 
   shouldDisplayMonth(month: MonthActivities): boolean {
-    return month.currentMonth != null && month.currentMonth >= this.minDates[this.currentActivity];
+    return month.currentMonth != null && month.currentMonth >= this.minDates[this.currentActivityType];
   }
 
   onMonthSelect(month: number) {
     console.log('Month ' + month + ' selected' );
     this.stravaService.monthSelected.next(month);
+    this.selectedMonth = month;
   }
 
 }

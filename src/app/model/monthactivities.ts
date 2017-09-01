@@ -7,7 +7,7 @@ export  class MonthActivities {
 
   public currentMonth: Date;
 
-  public activityTypes: ActivitySummary[] = [null, null];
+  public activityTypes: ActivitySummary[] = [null, null, null];
 
   constructor(currentMonth: Date, activities: Observable<Activity[]>, loadingFinishedSubject: Subject<MonthActivities>) {
     activities.subscribe(data => {
@@ -24,6 +24,12 @@ export  class MonthActivities {
       const rideNums = rideActivities.length  ;
 
       this.activityTypes[1] = new ActivitySummary(rideActivities, rideTotalDistance, rideNums);
+
+      const hikeActivities = data.filter(activity => activity.type === 'Hike' || activity.type === 'Walk');
+      const hikeotalDistance = hikeActivities.reduce((sum, act) => sum + act.distance, 0)  ;
+      const hikeNums = hikeActivities.length  ;
+
+      this.activityTypes[2] = new ActivitySummary(hikeActivities, hikeotalDistance, hikeNums);
 
       loadingFinishedSubject.next(this);
     });

@@ -6,16 +6,26 @@ import {StravaService} from './strava.service';
 import {HttpClientModule} from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { SummaryComponent } from './summary/summary.component';
+import {TooltipModule} from 'ngx-bootstrap/tooltip';
+import { ActivitiesComponent } from './activities/activities.component';
+import { RunComponent } from './activities/run/run.component';
+import { RideComponent } from './activities/ride/ride.component';
+import { HikeComponent } from './activities/hike/hike.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    SummaryComponent
+    SummaryComponent,
+    ActivitiesComponent,
+    RunComponent,
+    RideComponent,
+    HikeComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    TooltipModule.forRoot()
   ],
   providers: [StravaService],
   bootstrap: [AppComponent]

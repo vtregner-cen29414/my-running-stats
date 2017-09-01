@@ -10,3 +10,7 @@
 .actbar:hover {
   background-color: #6e7de6;
 }
+
+.actbar.active {
+  background-color: #6e7de6;
+}

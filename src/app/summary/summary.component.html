@@ -3,8 +3,13 @@
     <tr>
       <td *ngFor="let month of activities; let i = index" style="vertical-align: bottom">
         <div *ngIf="shouldDisplayMonth(month)">
-          <div  style="text-align: center">{{ roundDistance(month.activityTypes[this.currentActivity].totalDistance) }}</div>
-          <div class="actbar" [ngStyle] = "{'height': computeHeight(month)}" (click)="onMonthSelect(i)"></div>
+          <div  style="text-align: center">{{ roundDistance(month.activityTypes[currentActivityType].totalDistance)
+            }}</div>
+          <div class="actbar"
+               tooltip="Select to view {{month.currentMonth | date:'M.yy'}} activities"
+               [ngStyle] = "{'height': computeHeight(month)}"
+               [ngClass] = "{'active': selectedMonth === i}"
+               (click)="onMonthSelect(i)"></div>
           <div style="text-align: center">{{month.currentMonth | date:'M.yy'}}</div>
         </div>
       </td>

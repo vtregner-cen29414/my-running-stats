@@ -15,7 +15,12 @@
       <li class="nav-item" [ngClass]="{active : currentActivityType === 1, activitySelected: currentActivityType === 1}">
         <a class="nav-link" (click)="onSelectActivity(1)" style="cursor: pointer;"><img src="../../assets/ride.png" class=".img-fluid" style="max-width: 50px"></a>
       </li>
+      <li class="nav-item" [ngClass]="{active : currentActivityType === 2, activitySelected: currentActivityType === 2}">
+        <a class="nav-link" (click)="onSelectActivity(2)" style="cursor: pointer;"><img src="../../assets/hike.png" class=".img-fluid" style="max-width: 50px"></a>
+      </li>
     </ul>
   </div>
+
+  <img [src]="(athlete | async).profile_medium" class="rounded-circle" style="max-width: 60px;">
 </nav>
 
