@@ -4,6 +4,8 @@
     <th>Date</th>
     <th>Moving time</th>
     <th>Pace <small>m/km</small></th>
+    <th>Avg heart rate </th>
+    <th>Max heart rate </th>
     <th>Distance</th>
   </tr>
   </thead>
@@ -11,14 +13,19 @@
   <tr>
     <th>{{ activitySummary.num }} runs in {{ month | date:'MMMM' }}</th>
     <th></th>
+    <th></th>
+    <th>{{ activitySummary.avgHeartRate | number:'.0-0' }}</th>
+    <th>{{ activitySummary.avgMaxHeartRate | number:'.0-0' }}</th>
     <th>Total {{ (activitySummary.totalDistance )/1000 | number:'.1-2' }} km</th>
   </tr>
   </tfoot>
   <tbody>
   <tr *ngFor="let act of activitySummary.activities">
-    <td><p>{{ act.start_date | date:'d.M.y H:m:s'}}</p></td>
+    <td><a [href]="'https://www.strava.com/activities/'.concat(act.id)" target="_blank">{{ act.start_date | date:'d.M.y H:m:s'}}</a></td>
     <td><p>{{ convertSeconds(act.moving_time) }}</p></td>
     <td><p>{{ computePace(act.moving_time, act.distance) }}</p></td>
+    <td><p>{{ act.average_heartrate | number:'.0-0' }}</p></td>
+    <td><p>{{ act.max_heartrate }}</p></td>
     <td><p>{{ act.distance/1000 | number:'.1-2' }} km</p></td>
   </tr>
   </tbody>

@@ -5,6 +5,9 @@ export class ActivitySummary {
   public totalDistance: number;
   public num: number;
 
+  public avgHeartRate;
+  public avgMaxHeartRate;
+
 
   constructor(activities: Activity[], totalDistance: number, num: number) {
     this.activities = activities;

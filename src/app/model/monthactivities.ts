@@ -17,7 +17,15 @@ export  class MonthActivities {
       const runTotalDistance = runActivities.reduce((sum, act) => sum + act.distance, 0)  ;
       const runNums = runActivities.length  ;
 
+      const withHeartRate = runActivities.filter(a => a.average_heartrate != null);
+      const avgHeartRate =  withHeartRate.reduce((sum, act) => sum + act.average_heartrate, 0) / withHeartRate.length  ;
+
+      const withMaxHeartRate = runActivities.filter(a => a.max_heartrate != null);
+      const avgMaxHeartRate =  withMaxHeartRate.reduce((sum, act) => sum + act.max_heartrate, 0) / withMaxHeartRate.length  ;
+
       this.activityTypes[0] = new ActivitySummary(runActivities, runTotalDistance, runNums);
+      this.activityTypes[0].avgHeartRate = avgHeartRate;
+      this.activityTypes[0].avgMaxHeartRate = avgMaxHeartRate;
 
       const rideActivities = data.filter(activity => activity.type === 'Ride');
       const rideTotalDistance = rideActivities.reduce((sum, act) => sum + act.distance, 0)  ;

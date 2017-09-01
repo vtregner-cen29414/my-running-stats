@@ -16,7 +16,7 @@
   </tfoot>
   <tbody>
   <tr *ngFor="let act of activitySummary.activities">
-    <td><p>{{ act.start_date | date:'d.M.y H:m:s'}}</p></td>
+    <td><a [href]="'https://www.strava.com/activities/'.concat(act.id)" target="_blank">{{ act.start_date | date:'d.M.y H:m:s'}}</a></td>
     <td><p>{{ convertSeconds(act.moving_time) }}</p></td>
     <td><p>{{ computeSpped(act.moving_time, act.distance) | number:'.1-2' }}</p></td>
     <td><p>{{ act.distance/1000 | number:'.1-2' }} km</p></td>
