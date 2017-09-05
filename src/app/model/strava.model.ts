@@ -34,5 +34,6 @@ export interface Athlete {
   state: string,
   country: string,
   sex: string,
-  premium: boolean
+  premium: boolean,
+  created_at: Date
 }

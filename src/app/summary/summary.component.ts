@@ -22,8 +22,7 @@ export class SummaryComponent implements OnInit {
       this.currentActivityType = type;
     });
 
-
-    this.activities = this.stravaService.activities.slice().reverse();
+    this.activities = this.stravaService.getActivitiesInSelectedYear().slice().reverse();
     this.selectedMonth = this.activities.length - 1;
 
     this.stravaService.activityLoadedSubject.subscribe((data: MonthActivities) => {
@@ -35,6 +34,11 @@ export class SummaryComponent implements OnInit {
           this.minDates[i] = data.currentMonth;
         }
       }
+    });
+
+    this.stravaService.yearObserver.subscribe((year: Date) => {
+      this.activities = this.stravaService.getActivitiesInSelectedYear(year).slice().reverse();
+      this.onMonthSelect(this.activities.length - 1);
     });
   }
 
