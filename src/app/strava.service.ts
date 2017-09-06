@@ -1,26 +1,29 @@
 import { Injectable, OnInit } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import {Activity, Athlete} from './model/strava.model';
+import {Activity, Athlete, Token} from './model/strava.model';
 import {MonthActivities} from './model/monthactivities';
 import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/observable/of';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class StravaService implements OnInit {
 
   private static STRAVA_BASE_URL = 'https://www.strava.com/api/v3';
 
+  private static STORAGE_ACCESS_TOKEN = 'STORAGE_ACCESS_TOKEN';
+
+  public authenticated = false;
+
   private config =
   {
          'clientID'    : 19867,
          'clientSecret': '9fc4dc916b3f2cc344b1fba9b4d31fc89515209a',
-         'accessToken' : '501cdf7311ccee17346b0d2a166b9efc0ea6a6c5'
+         'accessToken' : null
          // 'testActivityId': id-of-one-of-your-activities
   };
 
   public activityMap: Map<number, MonthActivities[]> = new Map();
-
-  public athlete$: Observable<Athlete>;
 
   public activityTypeObserver: Subject<number> = new Subject();
 
@@ -30,13 +33,28 @@ export class StravaService implements OnInit {
 
   public yearObserver: Subject<Date> = new Subject();
 
-  constructor(private http: HttpClient) {
+  public athleteLoadedObserver: Subject<Athlete> = new Subject();
+
+  public athlete: Athlete;
+
+  constructor(private http: HttpClient, private router: Router) {
     this.ngOnInit();
   }
 
   ngOnInit(): void {
-    this.fetchAthlete()    ;
-    this.fetchActivities(new Date());
+    this.athleteLoadedObserver.subscribe((data: Athlete) => {
+      this.athlete = data;
+    });
+
+    const accessToken: string = localStorage.getItem(StravaService.STORAGE_ACCESS_TOKEN);
+    if (accessToken != null) {
+      this.config.accessToken = accessToken;
+      this.fetchAthlete();
+      this.fetchActivities(new Date());
+      this.authenticated = true;
+    }
+
+
   }
 
   public getActivitiesInSelectedYear(year?: Date): MonthActivities[] {
@@ -68,6 +86,24 @@ export class StravaService implements OnInit {
       d = new Date();
     }
     return d;
+  }
+
+  fetchAccessToken(code: string) {
+    this.http
+      .post<Token>('https://www.strava.com/oauth/token',
+        {
+          client_id: this.config.clientID,
+          client_secret: this.config.clientSecret,
+          code: code
+          })
+      .subscribe((token: Token) => {
+        this.config.accessToken = token.access_token;
+        localStorage.setItem(StravaService.STORAGE_ACCESS_TOKEN, token.access_token);
+        this.authenticated = true;
+        this.athleteLoadedObserver.next(token.athlete);
+        this.fetchActivities(new Date());
+        this.router.navigate(['/stats']);
+      });
   }
 
   fetchActivities(yearFrom: Date) {
@@ -107,8 +143,19 @@ export class StravaService implements OnInit {
 
   fetchAthlete() {
     console.log('Fetching athlete');
-    this.athlete$ = this.http
+    this.http
       .get<Athlete>(StravaService.STRAVA_BASE_URL + '/athlete', {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.config.accessToken}`)});
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.config.accessToken}`)})
+      .subscribe((data: Athlete) => {
+        this.athleteLoadedObserver.next(data);
+      })
+  }
+
+  getAuthoriteUrl(): string {
+    return `https://www.strava.com/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=http://localhost:4200/token_exchange`;
+  }
+
+  isAutheticated(): boolean {
+    return this.authenticated;
   }
 }

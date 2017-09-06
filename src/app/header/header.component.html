@@ -3,24 +3,32 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <!-- Brand -->
-  <h3 class="navbar-brand" *ngIf="athlete != null">{{ getDisplayName(athlete | async)}}</h3>
-
-  <!-- Links -->
-  <div class="collapse navbar-collapse" id="nav-content">
-    <ul class="navbar-nav">
-      <li class="nav-item" [ngClass]="{active : currentActivityType === 0, activitySelected: currentActivityType === 0}">
-        <a class="nav-link" (click)="onSelectActivity(0)" style="cursor: pointer;"><img src="../../assets/run.png" class=".img-fluid" style="max-width: 50px"></a>
-      </li>
-      <li class="nav-item" [ngClass]="{active : currentActivityType === 1, activitySelected: currentActivityType === 1}">
-        <a class="nav-link" (click)="onSelectActivity(1)" style="cursor: pointer;"><img src="../../assets/ride.png" class=".img-fluid" style="max-width: 50px"></a>
-      </li>
-      <li class="nav-item" [ngClass]="{active : currentActivityType === 2, activitySelected: currentActivityType === 2}">
-        <a class="nav-link" (click)="onSelectActivity(2)" style="cursor: pointer;"><img src="../../assets/hike.png" class=".img-fluid" style="max-width: 50px"></a>
-      </li>
-    </ul>
+  <div class="navbar-brand" *ngIf="!stravaService.authenticated; else isauthenticated">
+    <h3>Welcome to Strava My-Stats</h3>
   </div>
 
-  <img [src]="(athlete | async)?.profile_medium" class="rounded-circle" style="max-width: 60px;">
+
+  <ng-template #isauthenticated>
+    <!-- Brand -->
+    <h3 class="navbar-brand" *ngIf="athlete != null">{{ getDisplayName(athlete)}}</h3>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="nav-content">
+      <ul class="navbar-nav">
+        <li class="nav-item" [ngClass]="{active : currentActivityType === 0, activitySelected: currentActivityType === 0}">
+          <a class="nav-link" (click)="onSelectActivity(0)" style="cursor: pointer;"><img src="../../assets/run.png" class=".img-fluid" style="max-width: 50px"></a>
+        </li>
+        <li class="nav-item" [ngClass]="{active : currentActivityType === 1, activitySelected: currentActivityType === 1}">
+          <a class="nav-link" (click)="onSelectActivity(1)" style="cursor: pointer;"><img src="../../assets/ride.png" class=".img-fluid" style="max-width: 50px"></a>
+        </li>
+        <li class="nav-item" [ngClass]="{active : currentActivityType === 2, activitySelected: currentActivityType === 2}">
+          <a class="nav-link" (click)="onSelectActivity(2)" style="cursor: pointer;"><img src="../../assets/hike.png" class=".img-fluid" style="max-width: 50px"></a>
+        </li>
+      </ul>
+    </div>
+
+    <img [src]="(athlete)?.profile_medium" class="rounded-circle" style="max-width: 60px;">
+  </ng-template>
+
 </nav>
 

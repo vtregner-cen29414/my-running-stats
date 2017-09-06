@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {StravaService} from '../strava.service';
 import {Athlete} from '../model/strava.model';
-import {Observable} from 'rxjs/Observable';
+import { DOCUMENT } from '@angular/common';
+
 
 @Component({
   selector: 'app-header',
@@ -9,13 +10,16 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  athlete: Observable<Athlete>;
+  athlete: Athlete;
   currentActivityType = 0;
 
-  constructor(private stravaService: StravaService) { }
+  constructor(private stravaService: StravaService, @Inject(DOCUMENT) private document: any) { }
 
   ngOnInit() {
-    this.athlete = this.stravaService.athlete$;
+    this.stravaService.athleteLoadedObserver.subscribe((data: Athlete) => {
+      console.log('HeaderComponent: athleteLoadedObserver');
+      this.athlete = data;
+    });
   }
 
   getDisplayName(athlete: Athlete): string {
@@ -23,7 +27,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onSelectActivity(type: number) {
-    console.log(type);
     this.currentActivityType = type;
     this.stravaService.activityTypeObserver.next(type);
   }

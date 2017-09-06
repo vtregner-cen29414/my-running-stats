@@ -37,3 +37,8 @@ export interface Athlete {
   premium: boolean,
   created_at: Date
 }
+
+export interface Token {
+  access_token: string,
+  athlete: Athlete
+}

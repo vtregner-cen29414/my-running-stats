@@ -1,26 +1,6 @@
 <div class="container">
   <app-header></app-header>
 
-  <tabset type="pills">
-    <tab *ngFor="let year of years; let i = index" [heading]="year | date:'y'" (select) = "onYearSelect(i)">
-      <h5>{{ getYearTotalDistance()}} km</h5>
-    </tab>
-  </tabset>
-
-  <app-summary></app-summary>
-
-  <div style="padding-top: 30px"></div>
-
-  <div *ngIf="getYearTotalDistance() !== 0">
-  <app-activities
-    *ngIf="activities[selectedMonthIndex].currentMonth != null; else loading"
-    [currentActivityType]="currentActivityType"
-    [activities]="activities[selectedMonthIndex]">
-  </app-activities>
-
-  <ng-template #loading>
-    Loading...
-  </ng-template>
-  </div>
+  <router-outlet></router-outlet>
 
 </div>

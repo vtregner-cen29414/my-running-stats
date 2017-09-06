@@ -12,6 +12,18 @@ import { RunComponent } from './activities/run/run.component';
 import { RideComponent } from './activities/ride/ride.component';
 import { HikeComponent } from './activities/hike/hike.component';
 import {TabsModule} from 'ngx-bootstrap';
+import { RouterModule, Routes} from '@angular/router';
+import { ContentComponent } from './content/content.component';
+import { TokenExchangeComponent } from './token-exchange/token-exchange.component';
+import {AuthGuard} from './auth-guard.service';
+import { LoginComponent } from './login/login.component';
+
+const appRoutes: Routes = [
+  { path: '', redirectTo: '/stats', pathMatch: 'full' },
+  { path: 'login', component:  LoginComponent},
+  { path: 'token_exchange', component:  TokenExchangeComponent},
+  { path: 'stats', component:  ContentComponent, canActivate: [AuthGuard]}
+];
 
 @NgModule({
   declarations: [
@@ -21,15 +33,19 @@ import {TabsModule} from 'ngx-bootstrap';
     ActivitiesComponent,
     RunComponent,
     RideComponent,
-    HikeComponent
+    HikeComponent,
+    ContentComponent,
+    TokenExchangeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    RouterModule.forRoot(appRoutes),
     TooltipModule.forRoot(),
     TabsModule.forRoot()
   ],
-  providers: [StravaService],
+  providers: [StravaService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {
