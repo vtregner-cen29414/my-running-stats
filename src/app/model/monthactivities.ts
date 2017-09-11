@@ -1,7 +1,8 @@
-import {Activity} from './strava.model';
+import {Activity, ErrorCallback} from './strava.model';
 import {Observable} from 'rxjs/Observable';
 import {ActivitySummary} from './activitysummary.model';
 import {Subject} from 'rxjs/Subject';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export  class MonthActivities {
 
@@ -9,7 +10,7 @@ export  class MonthActivities {
 
   public activityTypes: ActivitySummary[] = [null, null, null];
 
-  constructor(currentMonth: Date, activities: Observable<Activity[]>, loadingFinishedSubject: Subject<MonthActivities>) {
+  constructor(currentMonth: Date, activities: Observable<Activity[]>, loadingFinishedSubject: Subject<MonthActivities>, errorCallback: ErrorCallback) {
     activities.subscribe(data => {
       this.currentMonth = currentMonth;
 
@@ -40,7 +41,11 @@ export  class MonthActivities {
       this.activityTypes[2] = new ActivitySummary(hikeActivities, hikeotalDistance, hikeNums);
 
       loadingFinishedSubject.next(this);
-    });
+      console.log('Activity fetched ' + currentMonth.toLocaleDateString());
+    },
+      (err: HttpErrorResponse) => {
+        errorCallback.handleError(err);
+      });
   }
 
 }

@@ -1,13 +1,13 @@
 import { Injectable, OnInit } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Activity, Athlete, Token} from './model/strava.model';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Activity, Athlete, ErrorCallback, Token} from './model/strava.model';
 import {MonthActivities} from './model/monthactivities';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/of';
 import {Router} from '@angular/router';
 
 @Injectable()
-export class StravaService implements OnInit {
+export class StravaService implements OnInit, ErrorCallback {
 
   private static STRAVA_BASE_URL = 'https://www.strava.com/api/v3';
 
@@ -133,8 +133,7 @@ export class StravaService implements OnInit {
             .set('after', (startOfMonth.getTime() / 1000).toString()),
           headers: new HttpHeaders().set('Authorization', `Bearer ${this.config.accessToken}`)});
 
-      // this.activities.push(new MonthActivities(new Date(startOfMonth.getTime()), activitiesObservable, this.activityLoadedSubject));
-      activities.push(new MonthActivities(new Date(startOfMonth.getTime()), activitiesObservable, this.activityLoadedSubject));
+      activities.push(new MonthActivities(new Date(startOfMonth.getTime()), activitiesObservable, this.activityLoadedSubject, this));
     }
     while (startOfMonth > this.getStartOfYear(yearFrom));
 
@@ -146,12 +145,36 @@ export class StravaService implements OnInit {
     this.http
       .get<Athlete>(StravaService.STRAVA_BASE_URL + '/athlete', {
         headers: new HttpHeaders().set('Authorization', `Bearer ${this.config.accessToken}`)})
-      .subscribe((data: Athlete) => {
+      .subscribe(
+        (data: Athlete) => {
         this.athleteLoadedObserver.next(data);
-      })
+        },
+        (err: HttpErrorResponse) => {
+          this.handleError(err);
+    });
   }
 
-  getAuthoriteUrl(): string {
+  public handleError(err: HttpErrorResponse) {
+    if (err.error instanceof Error) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.log('An error occurred:', err.error.message);
+      this.router.navigate(['/error', {message: err.error.message}]);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+      if (err.status === 401) {
+        this.config.accessToken = null;
+        this.authenticated = false;
+        localStorage.removeItem(StravaService.STORAGE_ACCESS_TOKEN);
+        this.router.navigate(['/login']);
+      } else {
+        this.router.navigate(['/error', {status: err.status, message: err.error}]);
+      }
+    }
+  }
+
+  getAuthorizeUrl(): string {
     return `https://www.strava.com/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=http://localhost:4200/token_exchange`;
   }
 

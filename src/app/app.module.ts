@@ -17,12 +17,14 @@ import { ContentComponent } from './content/content.component';
 import { TokenExchangeComponent } from './token-exchange/token-exchange.component';
 import {AuthGuard} from './auth-guard.service';
 import { LoginComponent } from './login/login.component';
+import { ErrorComponent } from './error/error.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/stats', pathMatch: 'full' },
   { path: 'login', component:  LoginComponent},
   { path: 'token_exchange', component:  TokenExchangeComponent},
-  { path: 'stats', component:  ContentComponent, canActivate: [AuthGuard]}
+  { path: 'stats', component:  ContentComponent, canActivate: [AuthGuard]},
+  { path: 'error', component:  ErrorComponent}
 ];
 
 @NgModule({
@@ -36,7 +38,8 @@ const appRoutes: Routes = [
     HikeComponent,
     ContentComponent,
     TokenExchangeComponent,
-    LoginComponent
+    LoginComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

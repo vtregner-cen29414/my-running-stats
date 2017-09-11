@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.document.location.href = this.stravaService.getAuthoriteUrl();
+    this.document.location.href = this.stravaService.getAuthorizeUrl();
   }
 
 }

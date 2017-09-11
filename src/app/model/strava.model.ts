@@ -1,3 +1,5 @@
+import {HttpErrorResponse} from '@angular/common/http';
+
 export interface Activity {
   id: number,
   athlete: {
@@ -41,4 +43,8 @@ export interface Athlete {
 export interface Token {
   access_token: string,
   athlete: Athlete
+}
+
+export interface ErrorCallback {
+  handleError(err: HttpErrorResponse);
 }
