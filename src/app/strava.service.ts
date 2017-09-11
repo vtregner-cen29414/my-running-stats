@@ -51,7 +51,6 @@ export class StravaService implements OnInit, ErrorCallback {
     if (accessToken != null) {
       this.config.accessToken = accessToken;
       // this.config.accessToken = '9228fe318b6b6cca46f5d9d2c17d4aee4f7ee7c5';
-      console.log('Access Token: ' + accessToken);
       this.fetchAthlete();
       this.fetchActivities(new Date());
       this.authenticated = true;

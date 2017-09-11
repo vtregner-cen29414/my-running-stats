@@ -47,7 +47,6 @@ export class ContentComponent implements OnInit {
 
   private setupYears(data: Athlete) {
     this.years = [];
-    console.log('SetupYears');
     this.years.push(this.stravaService.getStartOfYear(data.created_at));
     const next = new Date(data.created_at);
     next.setFullYear(next.getFullYear() + 1, 0, 1);
@@ -59,10 +58,6 @@ export class ContentComponent implements OnInit {
     }
 
     this.years.reverse();
-
-    this.years.forEach((date: Date) => {
-      console.log(date.toLocaleDateString());
-    });
   }
 
   onYearSelect(yearIndex: number) {
