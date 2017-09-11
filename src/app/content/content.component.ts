@@ -74,7 +74,9 @@ export class ContentComponent implements OnInit {
   getYearTotalDistance(): number {
     let total = 0;
     this.activities.forEach(value => {
-      total = total + value.activityTypes[this.currentActivityType].totalDistance;
+      if (value.activityTypes[this.currentActivityType] != null) {
+        total = total + value.activityTypes[this.currentActivityType].totalDistance;
+      }
     });
     return Math.round(total / 1000);
   }
