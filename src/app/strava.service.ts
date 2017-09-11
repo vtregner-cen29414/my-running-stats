@@ -5,6 +5,7 @@ import {MonthActivities} from './model/monthactivities';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/of';
 import {Router} from '@angular/router';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class StravaService implements OnInit, ErrorCallback {
@@ -175,7 +176,7 @@ export class StravaService implements OnInit, ErrorCallback {
   }
 
   getAuthorizeUrl(): string {
-    return `https://www.strava.com/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=http://localhost:4200/token_exchange`;
+    return `https://www.strava.com/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=${environment.stravaRedirectUri}`;
   }
 
   isAutheticated(): boolean {

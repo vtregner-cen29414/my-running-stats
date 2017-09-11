@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit {
   athlete: Athlete;
   currentActivityType = 0;
 
-  constructor(private stravaService: StravaService, @Inject(DOCUMENT) private document: any) { }
+  constructor(public stravaService: StravaService, @Inject(DOCUMENT) private document: any) { }
 
   ngOnInit() {
     this.stravaService.athleteLoadedObserver.subscribe((data: Athlete) => {

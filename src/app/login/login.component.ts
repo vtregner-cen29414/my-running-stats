@@ -9,7 +9,7 @@ import {DOCUMENT} from '@angular/common';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private stravaService: StravaService, @Inject(DOCUMENT) private document: any) { }
+  constructor(public stravaService: StravaService, @Inject(DOCUMENT) private document: any) { }
 
   ngOnInit() {
   }
