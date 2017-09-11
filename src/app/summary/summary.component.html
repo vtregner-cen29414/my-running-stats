@@ -10,7 +10,7 @@
                [ngStyle] = "{'height': computeHeight(month)}"
                [ngClass] = "{'active': selectedMonth === i}"
                (click)="onMonthSelect(i)"></div>
-          <div style="text-align: center">{{month.currentMonth | date:'M.yy'}}</div>
+          <div style="text-align: center">{{month.currentMonth | date:'M'}}</div>
         </div>
       </td>
     </tr>

@@ -46,19 +46,23 @@ export class ContentComponent implements OnInit {
   }
 
   private setupYears(data: Athlete) {
+    this.years = [];
+    console.log('SetupYears');
     this.years.push(this.stravaService.getStartOfYear(data.created_at));
     const next = new Date(data.created_at);
     next.setFullYear(next.getFullYear() + 1, 0, 1);
     next.setHours(0, 0, 0, 0);
 
     while (next.getFullYear() <= (new Date().getFullYear())) {
-      this.years.push(next);
+      this.years.push(new Date(next));
       next.setFullYear(next.getFullYear() + 1, 0, 1);
     }
 
     this.years.reverse();
 
-    console.log(this.years);
+    this.years.forEach((date: Date) => {
+      console.log(date.toLocaleDateString());
+    });
   }
 
   onYearSelect(yearIndex: number) {
