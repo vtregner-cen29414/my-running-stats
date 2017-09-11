@@ -46,11 +46,6 @@ export class ContentComponent implements OnInit {
   }
 
   private setupYears(data: Athlete) {
-    const  fake = new Date();
-    fake.setFullYear(2016, 0, 1);
-    fake.setHours(0, 0, 0, 0);
-    this.years.push(fake);
-
     this.years.push(this.stravaService.getStartOfYear(data.created_at));
     const next = new Date(data.created_at);
     next.setFullYear(next.getFullYear() + 1, 0, 1);
