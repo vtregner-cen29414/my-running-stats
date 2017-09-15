@@ -1,8 +1,10 @@
-<tabset type="pills">
-  <tab *ngFor="let year of years; let i = index" [heading]="year | date:'y'" (select) = "onYearSelect(i)">
-    <h5>{{ getYearTotalDistance()}} km</h5>
-  </tab>
-</tabset>
+<ngb-tabset type="pills">
+  <ngb-tab *ngFor="let year of years; let i = index" [title]="year | date:'y'" (select) = "onYearSelect(i)">
+    <ng-template ngbTabContent>
+      <h5>{{ getYearTotalDistance()}} km</h5>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
 
 <app-summary></app-summary>
 

@@ -2,22 +2,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import {StravaService} from './strava.service';
-import {HttpClientModule} from '@angular/common/http';
+import { StravaService } from './strava.service';
+import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { SummaryComponent } from './summary/summary.component';
-import {TooltipModule} from 'ngx-bootstrap/tooltip';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ActivitiesComponent } from './activities/activities.component';
 import { RunComponent } from './activities/run/run.component';
 import { RideComponent } from './activities/ride/ride.component';
 import { HikeComponent } from './activities/hike/hike.component';
-import {TabsModule} from 'ngx-bootstrap';
 import { RouterModule, Routes} from '@angular/router';
 import { ContentComponent } from './content/content.component';
 import { TokenExchangeComponent } from './token-exchange/token-exchange.component';
-import {AuthGuard} from './auth-guard.service';
+import { AuthGuard} from './auth-guard.service';
 import { LoginComponent } from './login/login.component';
 import { ErrorComponent } from './error/error.component';
+
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/stats', pathMatch: 'full' },
@@ -39,14 +39,13 @@ const appRoutes: Routes = [
     ContentComponent,
     TokenExchangeComponent,
     LoginComponent,
-    ErrorComponent
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    TooltipModule.forRoot(),
-    TabsModule.forRoot()
+    NgbModule.forRoot()
   ],
   providers: [StravaService, AuthGuard],
   bootstrap: [AppComponent]

@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {StravaService} from './strava.service';
 import 'rxjs/add/operator/map';
-import {MonthActivities} from './model/monthactivities';
-import {Athlete} from './model/strava.model';
 
 
 @Component({
@@ -10,6 +7,8 @@ import {Athlete} from './model/strava.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent  {
+export class AppComponent implements OnInit {
+  ngOnInit(): void {
+  }
 
 }

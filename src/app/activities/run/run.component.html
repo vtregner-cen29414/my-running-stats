@@ -21,7 +21,7 @@
   </tfoot>
   <tbody>
   <tr *ngFor="let act of activitySummary.activities">
-    <td><a [href]="'https://www.strava.com/activities/'.concat(act.id)" target="_blank">{{ act.start_date | date:'d.M.y H:m:s'}}</a></td>
+    <td><a [href]="'https://www.strava.com/activities/'.concat(act.id)" target="_blank" [ngbTooltip]="act.name" container="body" placement="right">{{ act.start_date | date:'d.M.y H:m:s'}}</a></td>
     <td><p>{{ convertSeconds(act.moving_time) }}</p></td>
     <td><p>{{ computePace(act.moving_time, act.distance) }}</p></td>
     <td><p>{{ act.average_heartrate | number:'.0-0' }}</p></td>

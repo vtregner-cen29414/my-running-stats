@@ -6,7 +6,6 @@
           <div  style="text-align: center">{{ roundDistance(month.activityTypes[currentActivityType].totalDistance)
             }}</div>
           <div class="actbar"
-               tooltip="Select to view {{month.currentMonth | date:'M.yy'}} activities"
                [ngStyle] = "{'height': computeHeight(month)}"
                [ngClass] = "{'active': selectedMonth === i}"
                (click)="onMonthSelect(i)"></div>

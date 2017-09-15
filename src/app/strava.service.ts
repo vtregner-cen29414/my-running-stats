@@ -10,7 +10,8 @@ import { environment } from '../environments/environment';
 @Injectable()
 export class StravaService implements OnInit, ErrorCallback {
 
-  private static STRAVA_BASE_URL = 'https://www.strava.com/api/v3';
+  private static STRAVA_BASE_URL = 'https://www.strava.com';
+  private static STRAVA_BASE_API_URL = StravaService.STRAVA_BASE_URL + '/api/v3';
 
   private static STORAGE_ACCESS_TOKEN = 'STORAGE_ACCESS_TOKEN';
 
@@ -128,7 +129,7 @@ export class StravaService implements OnInit, ErrorCallback {
 
       console.log(`Fetching ${startOfMonth.toLocaleDateString()} - ${endOfMonth.toLocaleDateString()}`);
       const activitiesObservable = this.http
-        .get<Activity[]>(StravaService.STRAVA_BASE_URL + '/athlete/activities', {
+        .get<Activity[]>(StravaService.STRAVA_BASE_API_URL + '/athlete/activities', {
           params: new HttpParams()
             .set('per_page', '200')
             .set('before', (endOfMonth.getTime() / 1000).toString())
@@ -145,7 +146,7 @@ export class StravaService implements OnInit, ErrorCallback {
   fetchAthlete() {
     console.log('Fetching athlete');
     this.http
-      .get<Athlete>(StravaService.STRAVA_BASE_URL + '/athlete', {
+      .get<Athlete>(StravaService.STRAVA_BASE_API_URL + '/athlete', {
         headers: new HttpHeaders().set('Authorization', `Bearer ${this.config.accessToken}`)})
       .subscribe(
         (data: Athlete) => {
@@ -177,7 +178,8 @@ export class StravaService implements OnInit, ErrorCallback {
   }
 
   getAuthorizeUrl(): string {
-    return `https://www.strava.com/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=${environment.stravaRedirectUri}`;
+    return StravaService.STRAVA_BASE_URL
+        + `/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=${environment.stravaRedirectUri}`;
   }
 
   isAutheticated(): boolean {
