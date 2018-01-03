@@ -60,7 +60,7 @@ export class ContentComponent implements OnInit {
     this.years.reverse();
   }
 
-  onYearSelect(yearIndex: number) {
+  public onYearSelect(yearIndex: number) {
     console.log('Selecting ' + this.years[yearIndex].toLocaleDateString());
     this.stravaService.yearObserver.next(this.years[yearIndex]);
   }

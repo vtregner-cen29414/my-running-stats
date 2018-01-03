@@ -1,5 +1,5 @@
-<ngb-tabset type="pills">
-  <ngb-tab *ngFor="let year of years; let i = index" [title]="year | date:'y'" (select) = "onYearSelect(i)">
+<ngb-tabset type="pills" (tabChange)="onYearSelect(+$event.nextId)">
+  <ngb-tab *ngFor="let year of years; let i = index" [title]="year | date:'y'" [id]="i">
     <ng-template ngbTabContent>
       <h5>{{ getYearTotalDistance()}} km</h5>
     </ng-template>
