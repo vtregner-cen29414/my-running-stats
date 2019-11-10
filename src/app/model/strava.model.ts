@@ -41,7 +41,11 @@ export interface Athlete {
 }
 
 export interface Token {
-  access_token: string,
+  token_type: string;
+  expires_at: number;
+  expires_in: number;
+  refresh_token: string;
+  access_token: string;
   athlete: Athlete
 }
 

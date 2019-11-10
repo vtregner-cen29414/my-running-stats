@@ -1,11 +1,13 @@
-import { Injectable, OnInit } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Activity, Athlete, ErrorCallback, Token} from './model/strava.model';
 import {MonthActivities} from './model/monthactivities';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/of';
 import {Router} from '@angular/router';
-import { environment } from '../environments/environment';
+import {environment} from '../environments/environment';
+import {Observable} from 'rxjs/Observable';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class StravaService implements OnInit, ErrorCallback {
@@ -48,16 +50,43 @@ export class StravaService implements OnInit, ErrorCallback {
       this.athlete = data;
     });
 
-    const accessToken: string = localStorage.getItem(StravaService.STORAGE_ACCESS_TOKEN);
-    if (accessToken != null) {
-      this.config.accessToken = accessToken;
-      // this.config.accessToken = '9228fe318b6b6cca46f5d9d2c17d4aee4f7ee7c5';
-      this.fetchAthlete();
-      this.fetchActivities(new Date());
-      this.authenticated = true;
+
+    const item = localStorage.getItem(StravaService.STORAGE_ACCESS_TOKEN);
+    if (item) {
+      const token = (JSON.parse(item) as Token);
+      const accessToken: string = token.access_token
+      if (this.accessTokenIsExpired(token)) {
+        this.refreshAccessToken(token).subscribe(refreshedToken => {
+          this.loginDone(refreshedToken);
+        });
+      } else {
+        this.loginDone(token);
+      }
     }
+  }
 
+  private loginDone(token: Token) {
+    this.config.accessToken = token.access_token;
+    this.fetchAthlete();
+    this.fetchActivities(new Date());
+    this.authenticated = true;
+  }
 
+  public accessTokenIsExpired(tokenInfo: Token) {
+    return tokenInfo.expires_at < (new Date().getTime() / 1000);
+  }
+
+  public refreshAccessToken(tokenInfo: Token): Observable<Token> {
+    return this.http.post<Token>(StravaService.STRAVA_BASE_API_URL + '/oauth/token',
+      {
+        client_id: this.config.clientID,
+        client_secret: this.config.clientSecret,
+        grant_type: 'refresh_token',
+        refresh_token: tokenInfo.refresh_token
+      }).pipe(
+      tap(response => response.athlete = tokenInfo.athlete),
+      tap(response => localStorage.setItem(StravaService.STORAGE_ACCESS_TOKEN, JSON.stringify(response)))
+    );
   }
 
   public getActivitiesInSelectedYear(year?: Date): MonthActivities[] {
@@ -97,11 +126,12 @@ export class StravaService implements OnInit, ErrorCallback {
         {
           client_id: this.config.clientID,
           client_secret: this.config.clientSecret,
-          code: code
+          code: code,
+          grant_type: 'authorization_code'
           })
       .subscribe((token: Token) => {
         this.config.accessToken = token.access_token;
-        localStorage.setItem(StravaService.STORAGE_ACCESS_TOKEN, token.access_token);
+        localStorage.setItem(StravaService.STORAGE_ACCESS_TOKEN, JSON.stringify(token));
         this.authenticated = true;
         this.athleteLoadedObserver.next(token.athlete);
         this.fetchActivities(new Date());
@@ -179,7 +209,7 @@ export class StravaService implements OnInit, ErrorCallback {
 
   getAuthorizeUrl(): string {
     return StravaService.STRAVA_BASE_URL
-        + `/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=${environment.stravaRedirectUri}`;
+        + `/oauth/authorize?client_id=${this.config.clientID}&response_type=code&redirect_uri=${environment.stravaRedirectUri}&approval_prompt=force&scope=read,activity:read_all`;
   }
 
   isAutheticated(): boolean {
