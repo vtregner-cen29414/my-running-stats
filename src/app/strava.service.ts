@@ -70,6 +70,7 @@ export class StravaService implements OnInit, ErrorCallback {
     this.fetchAthlete();
     this.fetchActivities(new Date());
     this.authenticated = true;
+    this.router.navigate(['/stats']);
   }
 
   public accessTokenIsExpired(tokenInfo: Token) {
